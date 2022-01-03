@@ -238,7 +238,10 @@ def gumDetection(fname):
     
     cv2.imwrite('dst.jpg',dst)
     img_blur = cv2.GaussianBlur(imgE, (5,5), 0)
-    edges = cv2.Canny(image=img_blur, threshold1=10, threshold2=120)
+    mean, std = cv2.meanStdDev(croped)
+    TH1 =int(mean[0]-std[0])
+    TH2 = int(mean[0]+std[0])
+    edges = cv2.Canny(image=img_blur, threshold1=TH1, threshold2=TH2)
     cv2.imwrite("edges.jpg",edges)
     Xstorer =[]
     capOpener221  = Image.open(r"edges.jpg")
@@ -262,7 +265,8 @@ def gumDetection(fname):
             AverageArr.append(Final22)
 
     Averagenumber=sum(AverageArr)/len(AverageArr)
-    if(Averagenumber<10):
+    print(Averagenumber)
+    if(Averagenumber>7.7 and Averagenumber<8.2):
         return 0
     else:
         return 1
